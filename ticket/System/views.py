@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Project,Task
+from .models import Project,Task, User
 
 # Create your views here.
 
@@ -37,3 +37,10 @@ def project_view(request, pk):
                   {
                       "project": project
                   })
+
+
+def user_view(request):
+    user = User.objects.get(id="1")
+    return render(request, "profile.html", {
+        "user" : user
+    })
