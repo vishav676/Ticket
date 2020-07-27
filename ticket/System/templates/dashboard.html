@@ -8,7 +8,6 @@
 		<h5>Projects:</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Project</a>
 			<table class="table table-sm">
 				<tr>
 					<th>Project</th>
@@ -18,7 +17,7 @@
 					<tr>
 						<td>{{project.name}}</td>
 						<td>{{project.status}}</td>
-						<td>view</td>
+						<td><a href="{% url 'project' project.id %}"> view</a></td>
 					</tr>
 				{% endfor %}
 
@@ -27,10 +26,9 @@
 	</div>
 
 	<div class="col-md-7">
-		<h5>Last 5 Activity</h5>
+		<h5>Recent Activities</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Order</a>
 			<table class="table table-sm">
 				<tr>
                     <th>Task</th>
@@ -50,8 +48,8 @@
 						{% else %}
 							<td>{{task.status}}</td>
 						{% endif %}
-						<td>Remove</td>
-						<td>Update</td>
+						<td><button type="button" class="btn btn-danger">Remove</button></td>
+						<td><button type="button" class="btn btn-success">Update</button></td>
 					</tr>
 				{% endfor %}
 			</table>
