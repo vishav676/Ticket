@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from .models import Project,Task, User
+from django.shortcuts import render, redirect
+from .models import Project, Task, User
+from .forms import CreateUser
+from django.contrib.auth import authenticate, login, logout
+
 
 # Create your views here.
 
@@ -11,14 +14,13 @@ def home_view(request):
 def dashboard_view(request):
     total_projects = Project.objects.all().count()
     progress_projects = Project.objects.filter(status="Open").count()
-    print(progress_projects)
     project_completed = Project.objects.filter(status="Closed").count()
     tasks = Task.objects.all()
     projects = Project.objects.all()
-    return render(request, "dashboard.html",{
+    return render(request, "dashboard.html", {
         "total_projects": total_projects,
         "Inprogress": progress_projects,
-        "Completed" : project_completed,
+        "Completed": project_completed,
         "projects": projects,
         "tasks": tasks
     })
@@ -42,5 +44,30 @@ def project_view(request, pk):
 def user_view(request):
     user = User.objects.get(id="1")
     return render(request, "profile.html", {
-        "user" : user
+        "user": user
+    })
+
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("dashboard")
+
+    return render(request, "login.html")
+
+
+def register_view(request):
+    form = CreateUser()
+    if request.method == "POST":
+        form = CreateUser(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            form = CreateUser()
+    return render(request, "register.html", {
+        'form': form
     })
