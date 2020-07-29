@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Project, Task, User
+from .models import Project, Task, customer
 from .forms import CreateUser
 from django.contrib.auth import authenticate, login, logout
 
@@ -28,6 +28,7 @@ def dashboard_view(request):
 
 def projects_view(request):
     projects = Project.objects.all()
+
     return render(request, "project.html", {
         "projects": projects
     })
@@ -35,6 +36,8 @@ def projects_view(request):
 
 def project_view(request, pk):
     project = Project.objects.get(id=pk)
+    task = Task.objects.filter(project = pk)
+    print(task)
     return render(request, "project_detail.html",
                   {
                       "project": project
@@ -42,9 +45,11 @@ def project_view(request, pk):
 
 
 def user_view(request):
-    user = User.objects.get(id="1")
+    users = customer.objects.get(id="1")
+    mail = users.username.email
     return render(request, "profile.html", {
-        "user": user
+        "user": users,
+        "mail": mail
     })
 
 
@@ -52,9 +57,9 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
+        userlogin = authenticate(request, username=username, password=password)
+        if userlogin is not None:
+            login(request, userlogin)
             return redirect("dashboard")
 
     return render(request, "login.html")
