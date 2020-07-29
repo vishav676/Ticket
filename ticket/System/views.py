@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Project, Task, customer
 from .forms import CreateUser
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -11,6 +12,7 @@ def home_view(request):
     return render(request, "base.html")
 
 
+@login_required(login_url='login')
 def dashboard_view(request):
     total_projects = Project.objects.all().count()
     progress_projects = Project.objects.filter(status="Open").count()
@@ -26,6 +28,7 @@ def dashboard_view(request):
     })
 
 
+@login_required(login_url='login')
 def projects_view(request):
     projects = Project.objects.all()
 
@@ -34,6 +37,7 @@ def projects_view(request):
     })
 
 
+@login_required(login_url='login')
 def project_view(request, pk):
     project = Project.objects.get(id=pk)
     task = Task.objects.filter(project=pk)
@@ -44,6 +48,7 @@ def project_view(request, pk):
                   })
 
 
+@login_required(login_url='login')
 def user_view(request):
     users = customer.objects.get(id="1")
     mail = users.username.email
@@ -54,6 +59,9 @@ def user_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -72,11 +80,6 @@ def register_view(request):
         if form.is_valid():
             print("working")
             form.save()
-
-            email = request.POST.get("email")
-            username = request.POST.get('username')
-
-            # customer.objects.create(username=username, email=email)
             return redirect('login')
         else:
             print("not working")
@@ -86,6 +89,12 @@ def register_view(request):
     })
 
 
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required(login_url='login')
 def deleteTask(request, pk):
     task = Task.objects.get(id=pk)
     task.delete()
