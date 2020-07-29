@@ -89,4 +89,4 @@ def register_view(request):
 def deleteTask(request, pk):
     task = Task.objects.get(id=pk)
     task.delete()
-    return redirect('dashboard.html')
+    return redirect('dashboard')

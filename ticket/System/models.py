@@ -36,7 +36,7 @@ class Task(models.Model):
     )
     name = models.CharField(max_length=50)
     summary = models.TextField(max_length=1000)
-    project = models.ForeignKey("Project", on_delete=models.SET_NULL, null=True)
+    project = models.ForeignKey("Project", on_delete=models.DO_NOTHING, null=True)
     date_created = models.DateField(auto_now=True)
     status = models.CharField(max_length=200, choices=TASK_STATUS, default="Pending", null=True)
 
