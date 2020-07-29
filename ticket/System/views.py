@@ -36,7 +36,7 @@ def projects_view(request):
 
 def project_view(request, pk):
     project = Project.objects.get(id=pk)
-    task = Task.objects.filter(project = pk)
+    task = Task.objects.filter(project=pk)
     print(task)
     return render(request, "project_detail.html",
                   {
@@ -70,9 +70,23 @@ def register_view(request):
     if request.method == "POST":
         form = CreateUser(request.POST)
         if form.is_valid():
+            print("working")
             form.save()
+
+            email = request.POST.get("email")
+            username = request.POST.get('username')
+
+            # customer.objects.create(username=username, email=email)
+            return redirect('login')
         else:
+            print("not working")
             form = CreateUser()
     return render(request, "register.html", {
         'form': form
     })
+
+
+def deleteTask(request, pk):
+    task = Task.objects.get(id=pk)
+    task.delete()
+    return redirect('dashboard.html')
