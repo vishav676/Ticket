@@ -6,15 +6,15 @@
   {% csrf_token %}
   <div class="form-group">
     <label for="title">Title</label>
-    <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+    <input type="text" class="form-control" name="title" id="title" placeholder="Title" required autofocus>
   </div>
   <div class="form-group">
       <label for="description">Description</label>
-      <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+      <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
   </div>
   <div class="form-group">
     <label for="selectProject">Project</label>
-    <select class="form-control" id="selectProject" name="projectSelect">
+    <select class="form-control" id="selectProject" name="projectSelect" required>
       {% for project in projects %}
         <option>{{ project.name }}</option>
       {% endfor %}
@@ -22,7 +22,7 @@
   </div>
   <div class="form-group">
     <label for="selectStatus">Status</label>
-    <select class="form-control" id="selectStatus" name="statusSelect">
+    <select class="form-control" id="selectStatus" name="statusSelect" required>
       {% for stat in status %}
         <option value={{stat.0}}>{{stat.1}}</option>
       {% endfor %}
