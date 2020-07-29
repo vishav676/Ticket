@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Go</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+  </div>
+  <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="selectProject">Project</label>
+    <select class="form-control" id="selectProject" name="projectSelect">
+      {% for project in projects %}
+        <option>{{ project.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="selectStatus">Status</label>
+    <select class="form-control" id="selectStatus" name="statusSelect">
+      {% for stat in status %}
+        <option value={{stat.0}}>{{stat.1}}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Primary</button>
+  </div>
+
+</form>
+{% endblock %}

@@ -22,7 +22,7 @@ class Project(models.Model):
     date_created = models.DateField(auto_now=True)
     last_updated = models.DateField(auto_now=True)
     status = models.CharField(max_length=200, choices=PROJECT_STATUS, default="Open", null=True)
-    created_by = models.ForeignKey("customer", on_delete=models.CASCADE,default=1)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_projects')
 
     def __str__(self):
         return f"{self.name}"
@@ -36,7 +36,7 @@ class Task(models.Model):
     )
     name = models.CharField(max_length=50)
     summary = models.TextField(max_length=1000)
-    project = models.ForeignKey("Project", on_delete=models.DO_NOTHING, null=True)
+    project = models.ForeignKey("Project", on_delete=models.CASCADE, null=True, related_name='projectTasks')
     date_created = models.DateField(auto_now=True)
     status = models.CharField(max_length=200, choices=TASK_STATUS, default="Pending", null=True)
 
