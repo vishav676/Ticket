@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import customer, Project
+from .models import customer, Project, Task
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 
@@ -29,6 +29,30 @@ class CustomerForm(ModelForm):
 class ProjectUpdationForm(ModelForm):
     class Meta:
         model = Project
+        fields = "__all__"
+
+
+class task_add_update(ModelForm):
+
+    def __init__(self, user, *args, **kwargs):
+
+        super(task_add_update, self).__init__(*args, **kwargs)
+
+        try:
+            q = Project.objects.filter(created_by=user)
+            self.fields['project'] = ModelChoiceField(queryset=q, initial=q)
+        except:
+            pass
+
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
+    summary = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control'
+    }))
+
+    class Meta:
+        model = Task
         fields = "__all__"
 
 

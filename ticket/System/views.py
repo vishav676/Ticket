@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import Project, Task, customer
 from django.contrib.auth.models import Group
-from .forms import CreateUser, CustomerForm, CreateProject, ProjectUpdationForm
+from .forms import CreateUser, CustomerForm, CreateProject, task_add_update
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 # Create your views here.
+
 
 def home_view(request):
     return render(request, "base.html")
@@ -120,20 +121,15 @@ def delete_task(request, pk):
 
 
 def newtask_view(request):
+    form = task_add_update(request.user)
     if request.method == "POST":
-        name = request.POST.get("title")
-        summary = request.POST.get("description")
-        project = Project.objects.filter(name=request.POST.get("projectSelect"))[:1].get()
-        status = request.POST.get("statusSelect")
-        task = Task.objects.create(name=name, summary=summary, project=project, status=status)
-        if task is not None:
-            task.save()
-    user = request.user
-    projects = user.user_projects.all()
-    status = Task.TASK_STATUS
-    return render(request, 'new_task.html',{
-        'projects': projects,
-        'status': status
+        form = task_add_update(request.user,request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            form = task_add_update(request.user)
+    return render(request, 'add_update.html',{
+        'form': form
     })
 
 
@@ -147,7 +143,7 @@ def new_project_view(request):
             form.save()
         else:
             form = CreateProject(request.user)
-    return render(request, 'new_project.html',{
+    return render(request, 'add_update.html',{
         'form': form
     })
 
@@ -161,8 +157,23 @@ def update_project_view(request, pk):
             form.save()
             messages.info(request, "Changes saved")
         else:
-            form = CreateProject(request.user)
+            form = CreateProject(request.user, instance=project)
 
-    return render(request, "update_project.html",{
+    return render(request, "add_update.html", {
         'form': form
+    })
+
+
+def update_task(request, pk):
+    task = Task.objects.get(id=pk)
+    form = task_add_update(request.user, instance=task)
+    if request.method == "POST":
+        form = task_add_update(request.user, request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+        else:
+            form = task_add_update(request.user,instance=task)
+
+    return render(request, "add_update.html", {
+        "form":form
     })

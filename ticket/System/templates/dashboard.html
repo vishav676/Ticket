@@ -49,14 +49,13 @@
 							<td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button>
 								{% include 'delete.html' %}
 							</td>
-							<td><button type="button" class="btn btn-success">Update</button></td>
+							<td><a href="{% url 'updateTask' t.id%}"><button type="button" class="btn btn-success">Update</button></a></td>
 						</tr>
 					{% endfor %}
 				{% endfor %}
 			</table>
 		</div>
 	</div>
-
 </div>
 {% endblock %}
 
