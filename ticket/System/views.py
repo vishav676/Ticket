@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Project, Task, customer
 from django.contrib.auth.models import Group
-from .forms import CreateUser, CustomerForm
+from .forms import CreateUser, CustomerForm, CreateProject
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 
 # Create your views here.
 
@@ -80,6 +80,8 @@ def login_view(request):
         if userlogin is not None:
             login(request, userlogin)
             return redirect("dashboard")
+        else:
+            messages.info(request, "Invalid Username or Password.")
 
     return render(request, "login.html")
 
@@ -89,7 +91,6 @@ def register_view(request):
     if request.method == "POST":
         form = CreateUser(request.POST)
         if form.is_valid():
-            print("working")
             user = form.save()
             username = form.cleaned_data.get('username')
             group, create = Group.objects.get_or_create(name='customer')
@@ -99,8 +100,8 @@ def register_view(request):
 
             return redirect('login')
         else:
-            print("not working")
             form = CreateUser()
+            messages.info(request, "username already exists")
     return render(request, "register.html", {
         'form': form
     })
@@ -133,4 +134,19 @@ def newtask_view(request):
     return render(request, 'new_task.html',{
         'projects': projects,
         'status': status
+    })
+
+
+def new_project_view(request):
+    form = CreateProject(request.user)
+    if request.method == "POST":
+        form = CreateProject(request.user, request.POST)
+        print(form)
+        if form.is_valid():
+            print("working")
+            form.save()
+        else:
+            form = CreateProject(request.user)
+    return render(request, 'new_project.html',{
+        'form': form
     })

@@ -13,5 +13,6 @@ urlpatterns = [
     path('profile/', views.user_view, name="profile"),
     path('<int:pk>', views.delete_task, name="delete"),
     path('add/', views.newtask_view, name='newTask'),
-    path('logout/', views.user_logout, name='logout')
+    path('logout/', views.user_logout, name='logout'),
+    path('add/project/', views.new_project_view, name='addProject')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -19,6 +19,10 @@
             <p style="color: #FFFFFF">{{form.password2.label_tag}}</p><p>{{form.password2}}</p>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
         </form>
+        <p style="color:#FFFFFF;"><a href="{% url 'login' %}">Already have Account</a></p>
+        {% for error in messages %}
+            <p style="color: #FFFFFF">{{ error }}</p>
+        {% endfor %}
     </div>
 
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>

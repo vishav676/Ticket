@@ -20,6 +20,9 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </form>
         <p style="color:#FFFFFF;"><a href="{% url 'register' %}">Create New Account</a></p>
+        {% for error in messages %}
+            <p style="color: #FFFFFF">{{ error }}</p>
+        {% endfor %}
     </div>
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
