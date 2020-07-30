@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Project, Task, customer
 from django.contrib.auth.models import Group
-from .forms import CreateUser, CustomerForm, CreateProject
+from .forms import CreateUser, CustomerForm, CreateProject, ProjectUpdationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -148,5 +148,21 @@ def new_project_view(request):
         else:
             form = CreateProject(request.user)
     return render(request, 'new_project.html',{
+        'form': form
+    })
+
+
+def update_project_view(request, pk):
+    project = Project.objects.get(id=pk)
+    form = CreateProject(request.user, instance=project)
+    if request.method == "POST":
+        form = CreateProject(request.user, request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            messages.info(request, "Changes saved")
+        else:
+            form = CreateProject(request.user)
+
+    return render(request, "update_project.html",{
         'form': form
     })
