@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Project, Task, customer
+from .models import Project, Task, customer, Bug
 from django.contrib.auth.models import Group
-from .forms import CreateUser, CustomerForm, CreateProject, task_add_update
+from .forms import CreateUser, CustomerForm, CreateProject, task_add_update, BugForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -48,10 +48,12 @@ def projects_view(request):
 def project_view(request, pk):
     project = Project.objects.get(id=pk)
     task = project.projectTasks.all()
+    bugs = project.task_bugs.all()
     return render(request, "project_detail.html",
                   {
                       "project": project,
-                      'tasks': task
+                      'tasks': task,
+                      'bugs': bugs
                   })
 
 
@@ -173,6 +175,35 @@ def update_task(request, pk):
             form.save()
         else:
             form = task_add_update(request.user, instance=task)
+
+    return render(request, "add_update.html", {
+        "form": form
+    })
+
+
+def add_bug(request):
+    form = BugForm(request.user)
+    if request.method == "POST":
+        form = BugForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            form = BugForm(request.user)
+
+    return render(request, "add_update.html", {
+        "form": form
+    })
+
+
+def update_bug(request, pk):
+    bug = Bug.objects.get(id=pk)
+    form = BugForm(request.user, instance=bug)
+    if request.method == "POST":
+        form = BugForm(request.user, request.POST, instance=bug)
+        if form.is_valid():
+            form.save()
+        else:
+            form = BugForm(request.user, instance=bug)
 
     return render(request, "add_update.html", {
         "form": form

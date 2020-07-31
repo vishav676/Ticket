@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import customer, Project, Task
+from .models import customer, Project, Task, Bug
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 
@@ -82,3 +82,33 @@ class CreateProject(ModelForm):
     class Meta:
         model = Project
         fields = ["name", "description", "status", "created_by"]
+
+
+class BugForm(ModelForm):
+
+    def __init__(self, user, *args, **kwargs):
+
+        super(BugForm, self).__init__(*args, **kwargs)
+
+        try:
+            q = Project.objects.filter(created_by=user)
+            self.fields['project'] = ModelChoiceField(queryset=q, initial=q)
+        except:
+            pass
+
+    issue = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
+    description = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control'
+    }))
+    priority = forms.CharField(widget=forms.Select(choices=Bug.PRIORITY, attrs={
+        'class': 'form-control'
+    }))
+    status = forms.CharField(widget=forms.Select(choices=Bug.BUG_STATUS, attrs={
+        'class': 'form-control'
+    }))
+
+    class Meta:
+        model = Bug
+        fields = "__all__"

@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3 style="margin-top: 5%">{{ project.name }}</h3>
+	<h3 style="margin-top: 5%">{{ project.name }}
+	<a href="{% url 'addBug' %}">
+		<button type="button" class="btn btn-danger float-right" style="width: auto"><span data-feather="alert-octagon" style="margin-right: 5px"></span>Report Bug</button></a>
+	<a href="{% url 'newTask' %}"> <button type="button" class="btn btn-primary float-right" style="margin-right: 5px"><span data-feather="plus-circle" style="margin-right: 5px"></span>New Task</button></a>
+	</h3>
+
     <hr>
     <p>Description: {{ project.description }}</p>
     <div class="row" style="margin-top: 20px">
@@ -36,7 +41,37 @@
 				{% endfor %}
 			</table>
 		</div>
-        <a href="{% url 'newTask' %}"> <button type="button" class="btn btn-primary" style="margin-top: 5px">New Task</button></a>
+
+	</div>
+
+</div>
+<div class="row" style="margin-top: 20px">
+	<div class="col-md-12">
+		<h5>Bug Report</h5>
+		<hr>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+                    <th>Issue</th>
+					<th>Description</th>
+					<th>Priority</th>
+					<th>Status</th>
+					<th>Delete</th>
+					<th>Update</th>
+				</tr>
+				{% for bug in bugs %}
+					<tr>
+						<td>{{bug.issue}}</td>
+						<td>{{bug.description}}</td>
+						<td>{{bug.priority}}</td>
+						<td>{{bug.status}}</td>
+						<td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button>
+						</td>
+						<td><a href="{% url 'updateBug' bug.id%}"><button type="button" class="btn btn-success">Update</button></a></td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
 
 </div>
