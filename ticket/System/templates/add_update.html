@@ -5,7 +5,7 @@
     <form method="POST" action="">
         {% csrf_token %}
         {{form.as_table}}
-        <input class="btn btn-primary" type="submit" name="Update Information">
+        <input class="btn btn-primary float-right" type="submit" name="Update Information">
     </form>
     {% for message in messages %}
         {{ message }}

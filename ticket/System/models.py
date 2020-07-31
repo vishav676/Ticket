@@ -61,6 +61,7 @@ class Bug(models.Model):
     )
     issue = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
+    date_created = models.DateField(auto_now=True)
     priority = models.CharField(max_length=50, choices=PRIORITY, default="Normal")
     status = models.CharField(max_length=50, choices=BUG_STATUS, default="Pending")
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='task_bugs')
