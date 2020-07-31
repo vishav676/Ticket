@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+
 # Create your views here.
 
 
@@ -15,7 +16,6 @@ def home_view(request):
 
 @login_required(login_url='login')
 def dashboard_view(request):
-
     user = request.user
     total_projects = user.user_projects.count()
     progress_projects = user.user_projects.filter(status="Open").count()
@@ -66,7 +66,7 @@ def user_view(request):
             form.save()
 
     return render(request, "profile.html", {
-        "form":form
+        "form": form
     })
 
 
@@ -123,12 +123,12 @@ def delete_task(request, pk):
 def newtask_view(request):
     form = task_add_update(request.user)
     if request.method == "POST":
-        form = task_add_update(request.user,request.POST)
+        form = task_add_update(request.user, request.POST)
         if form.is_valid():
             form.save()
         else:
             form = task_add_update(request.user)
-    return render(request, 'add_update.html',{
+    return render(request, 'add_update.html', {
         'form': form
     })
 
@@ -143,7 +143,7 @@ def new_project_view(request):
             form.save()
         else:
             form = CreateProject(request.user)
-    return render(request, 'add_update.html',{
+    return render(request, 'add_update.html', {
         'form': form
     })
 
@@ -172,8 +172,8 @@ def update_task(request, pk):
         if form.is_valid():
             form.save()
         else:
-            form = task_add_update(request.user,instance=task)
+            form = task_add_update(request.user, instance=task)
 
     return render(request, "add_update.html", {
-        "form":form
+        "form": form
     })
