@@ -13,11 +13,8 @@
             {% csrf_token %}
             <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_8kwpOg.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop autoplay></lottie-player>
             <h1 class="h3 mb-3 font-weight-normal" style="color: #FFFFFF">Register With Us!!</h1>
-            <p style="color: #FFFFFF">{{form.username.label_tag}}</p><p>{{form.username}}</p>
-            <p style="color: #FFFFFF">{{form.email.label_tag}}</p><p>{{form.email}}</p>
-            <p style="color: #FFFFFF">{{form.password1.label_tag}}</p><p>{{form.password1}}</p>
-            <p style="color: #FFFFFF">{{form.password2.label_tag}}</p><p>{{form.password2}}</p>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+            {{form.as_p}}
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Get Started<span class="float-right" data-feather="arrow-right"></span></button>
         </form>
         <p style="color:#FFFFFF;"><a href="{% url 'login' %}">Already have Account</a></p>
         {% for error in messages %}
