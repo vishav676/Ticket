@@ -76,8 +76,11 @@ WSGI_APPLICATION = 'ticket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ProgressDB',
+        'USER': 'postgres',
+        'PASSWORD': '70870.vishav',
+        'PORT': 5432
     }
 }
 

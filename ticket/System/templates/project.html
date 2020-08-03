@@ -31,14 +31,12 @@
 								<td>{{project.status}}</td>
 								<td>{{project.last_updated}}</td>
 								<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
-								<td><button type="button" class="btn btn-danger">Remove</button></td>
+								<td><a href="{% url 'deleteProject' project.id %}"><button type="button" class="btn btn-danger">Remove</button></a></td>
 								<td><a href="{% url 'updateProject' project.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
 							</tr>
 						{% endfor %}
 					</table>
 				</div>
 			</div>
-
 		</div>
-
 {% endblock content %}

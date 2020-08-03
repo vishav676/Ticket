@@ -17,12 +17,26 @@
 					<tr>
 						<td>{{project.name}}</td>
 						<td>{{project.status}}</td>
-						<td><a href="{% url 'project' project.id %}"> view</a></td>
+						<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
 					</tr>
 				{% endfor %}
-
 			</table>
 		</div>
+		<span class="step-links float-right ">
+        	{% if projects.has_previous %}
+            	<a href="?page=1">&laquo; first</a>
+            	<a href="?page={{ projects.previous_page_number }}">previous</a>
+			{% endif %}
+
+        	<span class="current">
+            	Page {{ projects.number }} of {{ projects.paginator.num_pages }}.
+        	</span>
+
+        	{% if projects.has_next %}
+            	<a href="?page={{ projects.next_page_number }}">next</a>
+            	<a href="?page={{ projects.paginator.num_pages }}">last &raquo;</a>
+        	{% endif %}
+		</span>
 	</div>
 </div>
 <div class="row" style="margin-top: 20px">
@@ -39,17 +53,15 @@
 					<th>Delete</th>
 					<th>Update</th>
 				</tr>
-				{% for task in tasks %}
-					{% for t in task %}
+				{% for t in tasks %}
+					{% for task in t %}
 						<tr>
-							<td>{{t.name}}</td>
-							<td>{{t.project}}</td>
-							<td>{{t.date_created}}</td>
-							<td>{{ t.status }}</td>
-							<td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button>
-								{% include 'delete.html' %}
-							</td>
-							<td><a href="{% url 'updateTask' t.id%}"><button type="button" class="btn btn-success">Update</button></a></td>
+							<td>{{task.name}}</td>
+							<td>{{task.project}}</td>
+							<td>{{task.date_created}}</td>
+							<td>{{ task.status }}</td>
+							<td><a href="{% url 'deleteTask' task.id %}" ><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button></a></td>
+							<td><a href="{% url 'updateTask' task.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
 						</tr>
 					{% endfor %}
 				{% endfor %}

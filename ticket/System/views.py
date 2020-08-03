@@ -5,6 +5,7 @@ from .forms import CreateUser, CustomerForm, CreateProject, task_add_update, Bug
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -21,15 +22,17 @@ def dashboard_view(request):
     progress_projects = user.user_projects.filter(status="Open").count()
     project_completed = user.user_projects.filter(status="Closed").count()
     all_task = set()
-    for task in user.user_projects.select_related('created_by'):
-        all_task.add(task.projectTasks.all())
-    tasks = all_task
     projects = user.user_projects.all()
+    for project in projects:
+        all_task.add(project.projectTasks.all())
+    tasks = all_task
+    projects_pagination = pagination_view(request, projects, 3)
+
     return render(request, "dashboard.html", {
         "total_projects": total_projects,
         "Inprogress": progress_projects,
         "Completed": project_completed,
-        "projects": projects,
+        "projects": projects_pagination,
         "tasks": tasks
     })
 
@@ -44,15 +47,24 @@ def projects_view(request):
     })
 
 
+def pagination_view(request, page_class, number):
+    paginator = Paginator(page_class, number)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
+
 @login_required(login_url='login')
 def project_view(request, pk):
     project = Project.objects.get(id=pk)
     task = project.projectTasks.all()
-    bugs = project.task_bugs.all()
+    bugs = pagination_view(request, project.task_bugs.all(), 5)
+    page_obj = pagination_view(request, task, 5)
+
     return render(request, "project_detail.html",
                   {
                       "project": project,
-                      'tasks': task,
+                      'tasks': page_obj,
                       'bugs': bugs
                   })
 
@@ -99,7 +111,7 @@ def register_view(request):
             group, create = Group.objects.get_or_create(name='customer')
             user.groups.add(group)
 
-            customer.objects.create(user=user, name=user.username)
+            customer.objects.create(user=user, name=user.username, email=user.email)
 
             return redirect('login')
         else:
@@ -122,6 +134,12 @@ def delete_task(request, pk):
     return redirect('dashboard')
 
 
+def delete_project_view(request, pk):
+    project = Project.objects.get(id=pk)
+    project.delete()
+    return redirect('projects')
+
+
 def newtask_view(request):
     form = task_add_update(request.user)
     if request.method == "POST":
@@ -131,7 +149,8 @@ def newtask_view(request):
         else:
             form = task_add_update(request.user)
     return render(request, 'add_update.html', {
-        'form': form
+        'form': form,
+        'title': 'Add New Task'
     })
 
 
@@ -146,7 +165,8 @@ def new_project_view(request):
         else:
             form = CreateProject(request.user)
     return render(request, 'add_update.html', {
-        'form': form
+        'form': form,
+        "title": "Add Project"
     })
 
 
@@ -162,7 +182,8 @@ def update_project_view(request, pk):
             form = CreateProject(request.user, instance=project)
 
     return render(request, "add_update.html", {
-        'form': form
+        'form': form,
+        'title': "Update Project"
     })
 
 
@@ -177,7 +198,8 @@ def update_task(request, pk):
             form = task_add_update(request.user, instance=task)
 
     return render(request, "add_update.html", {
-        "form": form
+        "form": form,
+        "title": "Update Task"
     })
 
 
@@ -191,7 +213,8 @@ def add_bug(request):
             form = BugForm(request.user)
 
     return render(request, "add_update.html", {
-        "form": form
+        "form": form,
+        "title": "Report Bug"
     })
 
 
@@ -206,5 +229,12 @@ def update_bug(request, pk):
             form = BugForm(request.user, instance=bug)
 
     return render(request, "add_update.html", {
-        "form": form
+        "form": form,
+        "title": "Update Bug"
     })
+
+
+def delete_bug_view(request, pk):
+    bug = Bug.objects.get(id=pk)
+    bug.delete()
+    return redirect('projects')

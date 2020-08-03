@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h3 style="margin-top: 10px">Add New Project</h3>
+    <h3 style="margin-top: 10px">{{ title }}</h3>
     <hr>
     <form method="POST" action="">
         {% csrf_token %}

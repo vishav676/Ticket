@@ -6,17 +6,31 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.login_view, name='login'),
-    path('bug/add/', views.add_bug, name="addBug"),
-    path('register/', views.register_view, name= 'register'),
+    path('register/', views.register_view, name='register'),
     path('dashboard', views.dashboard_view, name="dashboard"),
-    path('projects/', views.projects_view, name="projects"),
-    path('bugs/update/<int:pk>',views.update_bug, name="updateBug"),
-    path('project/<int:pk>', views.project_view, name="project"),
     path('profile/', views.user_view, name="profile"),
-    path('<int:pk>', views.delete_task, name="delete"),
-    path('project/update/<int:pk>', views.update_project_view, name="updateProject"),
-    path('add/', views.newtask_view, name='newTask'),
-    path('task/update/<int:pk>', views.update_task, name="updateTask"),
     path('logout/', views.user_logout, name='logout'),
-    path('add/project/', views.new_project_view, name='addProject')
+]
+
+# urls for projects
+urlpatterns += [
+    path('project/update/<int:pk>', views.update_project_view, name="updateProject"),
+    path('project/delete/<int:pk>', views.delete_project_view, name="deleteProject"),
+    path('project/add/', views.new_project_view, name='addProject'),
+    path('projects/', views.projects_view, name="projects"),
+    path('project/<int:pk>', views.project_view, name="project"),
+]
+
+# urls for tasks
+urlpatterns += [
+    path('task/update/<int:pk>', views.update_task, name="updateTask"),
+    path('task/delete/<int:pk>', views.delete_task, name="deleteTask"),
+    path('task/add', views.newtask_view, name='newTask'),
+]
+
+# urls for bugs
+urlpatterns += [
+    path('bug/add/', views.add_bug, name="addBug"),
+    path('bug/delete/<int:pk>', views.delete_bug_view, name="deleteBug"),
+    path('bugs/update/<int:pk>', views.update_bug, name="updateBug"),
 ]
