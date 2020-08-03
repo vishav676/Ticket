@@ -6,11 +6,11 @@ from django.forms import ModelForm, ModelChoiceField
 
 
 class CreateUser(UserCreationForm):
-    email = forms.EmailField(label="",widget=forms.EmailInput(attrs={
+    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={
         'class': 'form-control',
         "placeholder": "Email"
     }))
-    username = forms.CharField(label="",widget=forms.TextInput(attrs={
+    username = forms.CharField(label="", widget=forms.TextInput(attrs={
         'class': 'form-control',
         "placeholder": "username"
     }))
@@ -43,12 +43,6 @@ class CustomerForm(ModelForm):
         exclude = ["user"]
 
 
-class ProjectUpdationForm(ModelForm):
-    class Meta:
-        model = Project
-        fields = "__all__"
-
-
 class task_add_update(ModelForm):
 
     def __init__(self, user, *args, **kwargs):
@@ -57,7 +51,10 @@ class task_add_update(ModelForm):
 
         try:
             q = Project.objects.filter(created_by=user)
-            self.fields['project'] = ModelChoiceField(queryset=q, initial=q)
+            self.fields['project'] = ModelChoiceField(queryset=q, initial=q, widget=forms.Select(attrs={
+                'class': 'form-control'
+            }))
+
         except:
             pass
 
@@ -67,10 +64,14 @@ class task_add_update(ModelForm):
     summary = forms.CharField(widget=forms.Textarea(attrs={
         'class': 'form-control'
     }))
+    status = forms.CharField(widget=forms.Select(choices=Task.TASK_STATUS, attrs={
+        'class': 'form-control',
+        'style': 'margin-bottom: 10px'
+    }))
 
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = '__all__'
 
 
 class CreateProject(ModelForm):
@@ -81,7 +82,10 @@ class CreateProject(ModelForm):
 
         try:
             q = User.objects.filter(username=user)
-            self.fields['created_by'] = ModelChoiceField(queryset=q, initial=q)
+            self.fields['created_by'] = ModelChoiceField(queryset=q, initial=q,widget=forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 10px'
+            }))
         except:
             pass
 
@@ -95,10 +99,13 @@ class CreateProject(ModelForm):
     created_by = forms.CharField(widget=forms.Select(attrs={
         'class': 'form-control',
     }))
+    status = forms.CharField(widget=forms.Select(choices=Project.PROJECT_STATUS, attrs={
+        'class': 'form-control'
+    }))
 
     class Meta:
         model = Project
-        fields = ["name", "description", "status", "created_by"]
+        fields = ["name", "description", "status","created_by"]
 
 
 class BugForm(ModelForm):
@@ -109,7 +116,10 @@ class BugForm(ModelForm):
 
         try:
             q = Project.objects.filter(created_by=user)
-            self.fields['project'] = ModelChoiceField(queryset=q, initial=q)
+            self.fields['project'] = ModelChoiceField(queryset=q, initial=q, widget=forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 10px'
+            }))
         except:
             pass
 

@@ -21,11 +21,16 @@ def dashboard_view(request):
     total_projects = user.user_projects.count()
     progress_projects = user.user_projects.filter(status="Open").count()
     project_completed = user.user_projects.filter(status="Closed").count()
+    all_bugs = set()
     all_task = set()
+    bugs_reported = 0
     projects = user.user_projects.all()
     for project in projects:
         all_task.add(project.projectTasks.all())
+        bugs_reported += project.task_bugs.count()
+        all_bugs.add(project.task_bugs.all())
     tasks = all_task
+    bugs = all_bugs
     projects_pagination = pagination_view(request, projects, 3)
 
     return render(request, "dashboard.html", {
@@ -33,7 +38,9 @@ def dashboard_view(request):
         "Inprogress": progress_projects,
         "Completed": project_completed,
         "projects": projects_pagination,
-        "tasks": tasks
+        "tasks": tasks,
+        "bugs": bugs,
+        "bugs_reported": bugs_reported
     })
 
 
@@ -107,7 +114,6 @@ def register_view(request):
         form = CreateUser(request.POST)
         if form.is_valid():
             user = form.save()
-            username = form.cleaned_data.get('username')
             group, create = Group.objects.get_or_create(name='customer')
             user.groups.add(group)
 
@@ -134,26 +140,32 @@ def delete_task(request, pk):
     return redirect('dashboard')
 
 
+@login_required(login_url='login')
 def delete_project_view(request, pk):
     project = Project.objects.get(id=pk)
     project.delete()
     return redirect('projects')
 
 
+@login_required(login_url='login')
 def newtask_view(request):
     form = task_add_update(request.user)
     if request.method == "POST":
         form = task_add_update(request.user, request.POST)
         if form.is_valid():
             form.save()
+            form = task_add_update(request.user)
+            messages.info(request, "Changes saved")
         else:
             form = task_add_update(request.user)
+
     return render(request, 'add_update.html', {
         'form': form,
         'title': 'Add New Task'
     })
 
 
+@login_required(login_url='login')
 def new_project_view(request):
     form = CreateProject(request.user)
     if request.method == "POST":
@@ -162,14 +174,17 @@ def new_project_view(request):
         if form.is_valid():
             print("working")
             form.save()
+            form = CreateProject(request.user)
         else:
             form = CreateProject(request.user)
+
     return render(request, 'add_update.html', {
         'form': form,
         "title": "Add Project"
     })
 
 
+@login_required(login_url='login')
 def update_project_view(request, pk):
     project = Project.objects.get(id=pk)
     form = CreateProject(request.user, instance=project)
@@ -177,6 +192,7 @@ def update_project_view(request, pk):
         form = CreateProject(request.user, request.POST, instance=project)
         if form.is_valid():
             form.save()
+            form = CreateProject(request.user, instance=project)
             messages.info(request, "Changes saved")
         else:
             form = CreateProject(request.user, instance=project)
@@ -187,6 +203,7 @@ def update_project_view(request, pk):
     })
 
 
+@login_required(login_url='login')
 def update_task(request, pk):
     task = Task.objects.get(id=pk)
     form = task_add_update(request.user, instance=task)
@@ -194,6 +211,7 @@ def update_task(request, pk):
         form = task_add_update(request.user, request.POST, instance=task)
         if form.is_valid():
             form.save()
+            form = task_add_update(request.user, instance=task)
         else:
             form = task_add_update(request.user, instance=task)
 
@@ -203,12 +221,14 @@ def update_task(request, pk):
     })
 
 
+@login_required(login_url='login')
 def add_bug(request):
     form = BugForm(request.user)
     if request.method == "POST":
         form = BugForm(request.user, request.POST)
         if form.is_valid():
             form.save()
+            form = BugForm(request.user)
         else:
             form = BugForm(request.user)
 
@@ -218,6 +238,7 @@ def add_bug(request):
     })
 
 
+@login_required(login_url='login')
 def update_bug(request, pk):
     bug = Bug.objects.get(id=pk)
     form = BugForm(request.user, instance=bug)
@@ -225,6 +246,7 @@ def update_bug(request, pk):
         form = BugForm(request.user, request.POST, instance=bug)
         if form.is_valid():
             form.save()
+            form = BugForm(request.user, instance=bug)
         else:
             form = BugForm(request.user, instance=bug)
 
@@ -234,6 +256,7 @@ def update_bug(request, pk):
     })
 
 
+@login_required(login_url='login')
 def delete_bug_view(request, pk):
     bug = Bug.objects.get(id=pk)
     bug.delete()

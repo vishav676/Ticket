@@ -1,42 +1,47 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-		<br>
+<br>
 
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card card-body">
-					<h5>Projects
-						<a href="{% url 'addProject'%}"> <button type="button" class="btn btn-primary float-right" style="width: auto"><span data-feather="plus-circle" style="margin-right: 5px"></span>Create New</button></a>
-					</h5>
+<div class="row">
+	<div class="col-md-12">
+		<div class="card card-body">
+			<h5>Projects
+				<a href="{% url 'addProject'%}"> <button type="button" class="btn btn-primary float-right" style="width: auto"><span data-feather="plus-circle" style="margin-right: 5px"></span>Create New</button></a>
+			</h5>
 
-				</div>
-				<div class="card card-body">
-					<table class="table table-sm">
-						<tr>
-							<th>Project</th>
-							<th>Description</th>
-							<th>Date Created</th>
-                            <th>Status</th>
-                            <th>Last Updated</th>
-							<th>Info</th>
-							<th>Delete</th>
-							<th>Update</th>
-						</tr>
-						{% for project in projects %}
-							<tr>
-								<td>{{project.name}}</td>
-								<td>{{project.description}}</td>
-								<td>{{project.date_created}}</td>
-								<td>{{project.status}}</td>
-								<td>{{project.last_updated}}</td>
-								<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
-								<td><a href="{% url 'deleteProject' project.id %}"><button type="button" class="btn btn-danger">Remove</button></a></td>
-								<td><a href="{% url 'updateProject' project.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
-							</tr>
-						{% endfor %}
-					</table>
-				</div>
-			</div>
 		</div>
+		{% if projects %}
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Project</th>
+					<th>Description</th>
+					<th>Date Created</th>
+					<th>Status</th>
+					<th>Last Updated</th>
+					<th>Info</th>
+					<th>Delete</th>
+					<th>Update</th>
+				</tr>
+				{% for project in projects %}
+				<tr>
+					<td>{{project.name}}</td>
+					<td>{{project.description}}</td>
+					<td>{{project.date_created}}</td>
+					<td>{{project.status}}</td>
+					<td>{{project.last_updated}}</td>
+					<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
+					<td><a href="{% url 'deleteProject' project.id %}"><button type="button" class="btn btn-danger">Remove</button></a></td>
+					<td><a href="{% url 'updateProject' project.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		{% else %}
+		<img src="{% static 'images/undraw_new_entries.svg' %}" style="width: 200px; height: 200px;" class="mx-auto d-block">
+		<h6 style="text-align: center">Show Some Creativity</h6>
+		{% endif %}
+	</div>
+</div>
 {% endblock content %}

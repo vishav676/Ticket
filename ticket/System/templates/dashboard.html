@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 {% include "status.html" %}
 <br>
-
+{% if projects %}
 <div class="row">
 	<div class="col-md-5">
 		<h5>Projects:</h5>
@@ -12,13 +13,14 @@
 				<tr>
 					<th>Project</th>
 					<th>Status</th>
+					<th></th>
 				</tr>
 				{% for project in projects %}
-					<tr>
-						<td>{{project.name}}</td>
-						<td>{{project.status}}</td>
-						<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
-					</tr>
+				<tr>
+					<td>{{project.name}}</td>
+					<td>{{project.status}}</td>
+					<td><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-info">View</button></a></td>
+				</tr>
 				{% endfor %}
 			</table>
 		</div>
@@ -38,6 +40,30 @@
         	{% endif %}
 		</span>
 	</div>
+	<div class="col-md-7">
+		<h5>Bugs Reported:</h5>
+		<hr>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Bug</th>
+					<th>Project</th>
+					<th>Priority</th>
+					<th>Status</th>
+				</tr>
+				{% for b in bugs %}
+					{% for bug in b %}
+					<tr>
+						<td>{{bug.issue}}</td>
+						<td>{{bug.project}}</td>
+						<td>{{bug.priority}}</td>
+						<td>{{bug.status}}</td>
+					</tr>
+					{% endfor %}
+				{% endfor %}
+			</table>
+		</div>
+	</div>
 </div>
 <div class="row" style="margin-top: 20px">
 	<div class="col-md-12">
@@ -46,7 +72,7 @@
 		<div class="card card-body">
 			<table class="table table-sm">
 				<tr>
-                    <th>Task</th>
+					<th>Task</th>
 					<th>Product</th>
 					<th>Date</th>
 					<th>Status</th>
@@ -54,20 +80,25 @@
 					<th>Update</th>
 				</tr>
 				{% for t in tasks %}
-					{% for task in t %}
-						<tr>
-							<td>{{task.name}}</td>
-							<td>{{task.project}}</td>
-							<td>{{task.date_created}}</td>
-							<td>{{ task.status }}</td>
-							<td><a href="{% url 'deleteTask' task.id %}" ><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button></a></td>
-							<td><a href="{% url 'updateTask' task.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
-						</tr>
-					{% endfor %}
+				{% for task in t %}
+				<tr>
+					<td>{{task.name}}</td>
+					<td>{{task.project}}</td>
+					<td>{{task.date_created}}</td>
+					<td>{{ task.status }}</td>
+					<td><a href="{% url 'deleteTask' task.id %}" ><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Remove</button></a></td>
+					<td><a href="{% url 'updateTask' task.id %}"><button type="button" class="btn btn-success">Update</button></a></td>
+				</tr>
+				{% endfor %}
 				{% endfor %}
 			</table>
 		</div>
 	</div>
 </div>
+{% else %}
+<img src="{% static 'images/undraw_new_entries.svg' %}" style="width: 200px; height: 200px;" class="mx-auto d-block">
+<h6 style="text-align: center">Show Some Creativity</h6>
+<a href="{% url 'addProject' %}"><button type="button" class="btn btn-primary mx-auto d-block">Add Project</button></a>
+{% endif %}
 {% endblock %}
 
