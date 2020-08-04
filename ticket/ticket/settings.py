@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from .secret import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR + "templates")
@@ -20,7 +20,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR + "templates")
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'k13j5kl(8zlw96dp=l5k(h2p_n&xhvm-xh6z+^v0y(hv9qezpf'
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'ticket.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ProgressDB',
-        'USER': 'postgres',
-        'PASSWORD': '70870.vishav',
-        'PORT': 5432
+        'NAME': NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'PORT': PORT
     }
 }
 

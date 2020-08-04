@@ -4,7 +4,11 @@
         <ul class="nav flex-column">
             <li class="nav-item" >
                 <div class="container text-center" >
-                    <img src="{{ request.user.customer.profile_pic.url }}" class="rounded-circle img-fluid" alt="Responsive Image" style="max-width: 100%; height: auto">
+                    {% if request.user.customer.profile_pic %}
+                        <img src="{{ request.user.customer.profile_pic.url }}" class="rounded-circle img-fluid" alt="Responsive Image" style="max-width: 100%; height: auto">
+                    {% else %}
+                        <img src="{% static 'images/profile.png'  %}" class="rounded-circle img-fluid" alt="Responsive Image" style="max-width: 100%; height: auto">
+                    {% endif %}
                     <p style="margin-top: 10px; color: #FFFFFF">{{ request.user.username }}</p>
                     <a href="{% url 'profile' %}"><p style="color: #FFFFFF">View Profile</p></a>
                 </div>
