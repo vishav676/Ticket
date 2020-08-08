@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'System'
 ]
 
@@ -80,7 +81,8 @@ DATABASES = {
         'NAME': NAME,
         'USER': USER,
         'PASSWORD': PASSWORD,
-        'PORT': PORT
+        'PORT': PORT,
+        'HOST': HOST
     }
 }
 
@@ -117,7 +119,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID_SECRET
+AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY_SECRET
+AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME_SECRET
+DEFAULT_FILE_STORAGE = DEFAULT_FILE_STORAGE_SECRET
+STATICFILES_STORAGE = STATICFILES_STORAGE_SECRET
+AWS_S3_FILE_OVERWRITE = AWS_S3_FILE_OVERWRITE_SECRET
+AWS_DEFAULT_ACL = AWS_DEFAULT_ACL_SECRET
+AWS_S3_REGION_NAME = "eu-central-1"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 

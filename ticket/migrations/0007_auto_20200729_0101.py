@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='created_by',
-            field=models.ForeignKey(default='vishav', on_delete=django.db.models.deletion.CASCADE, to='System.user'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='System.user'),
         ),
         migrations.AlterField(
             model_name='user',
