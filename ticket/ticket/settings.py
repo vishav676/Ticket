@@ -23,9 +23,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR + "templates")
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["progress-tracker-bugs.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -133,4 +133,5 @@ AWS_S3_REGION_NAME = "eu-central-1"
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'System/staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'System/static/images')
