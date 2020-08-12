@@ -4,9 +4,17 @@
 <h3 style="margin-top: 5%">{{ project.name }}<a href="{% url 'deleteProject' project.id %}" style="color: black"><span data-feather="trash-2" style="margin-bottom: 6px; margin-left: 5px"></span></a>
 	<a href="{% url 'addBug' %}">
 		<button type="button" class="btn btn-danger float-right" style="width: auto"><span data-feather="alert-octagon" style="margin-right: 5px"></span>Report Bug</button></a>
-	<a href="{% url 'newTask' %}"> <button type="button" class="btn btn-primary float-right" style="margin-right: 5px"><span data-feather="plus-circle" style="margin-right: 5px"></span>New Task</button></a>
-	</h3>
+	<a href="{% url 'newTask' %}">
+		<button type="button" class="btn btn-primary float-right" style="margin-right: 5px"><span data-feather="plus-circle" style="margin-right: 5px"></span>New Task</button></a>
+	<button type="button" class="btn btn-info float-right" data-toggle="collapse" data-target="#inviteCollab" style="margin-right: 5px"><span data-feather="link" style="margin-right: 5px"></span>Collab</button>
 
+	</h3>
+<div class="collapse" id = "inviteCollab">
+	<form class="form-inline" >
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  	</form>
+</div>
     <hr>
     <p>Description: {{ project.description }}</p>
     <div class="row" style="margin-top: 20px">

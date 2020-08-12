@@ -148,7 +148,7 @@ def delete_project_view(request, pk):
 
 
 @login_required(login_url='login')
-def newtask_view(request):
+def new_task_view(request):
     form = task_add_update(request.user)
     if request.method == "POST":
         form = task_add_update(request.user, request.POST)

@@ -25,7 +25,7 @@ urlpatterns += [
 urlpatterns += [
     path('task/update/<int:pk>', views.update_task, name="updateTask"),
     path('task/delete/<int:pk>', views.delete_task, name="deleteTask"),
-    path('task/add', views.newtask_view, name='newTask'),
+    path('task/add', views.new_task_view, name='newTask'),
 ]
 
 # urls for bugs
