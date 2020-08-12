@@ -23,7 +23,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR + "templates")
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["progress-tracker-bugs.herokuapp.com", "127.0.0.1"]
 
