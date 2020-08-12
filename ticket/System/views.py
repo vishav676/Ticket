@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Project, Task, customer, Bug
+from .models import Project, Task, customer, Bug, User
 from django.contrib.auth.models import Group
 from .forms import CreateUser, CustomerForm, CreateProject, task_add_update, BugForm
 from django.contrib.auth import authenticate, login, logout
@@ -63,6 +63,14 @@ def pagination_view(request, page_class, number):
 
 @login_required(login_url='login')
 def project_view(request, pk):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        try:
+            if User.objects.get(username=username):
+                print("Invitation sent")
+        except:
+            print("Invalid username")
+
     project = Project.objects.get(id=pk)
     task = project.projectTasks.all()
     bugs = pagination_view(request, project.task_bugs.all(), 5)
