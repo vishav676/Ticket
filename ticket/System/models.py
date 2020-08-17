@@ -68,3 +68,8 @@ class Bug(models.Model):
 
     def __int__(self):
         return f"{self.issue}[{self.project.name}"
+
+
+class Collab(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    projects = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)

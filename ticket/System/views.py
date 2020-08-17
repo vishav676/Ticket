@@ -65,11 +65,14 @@ def pagination_view(request, page_class, number):
 def project_view(request, pk):
     if request.method == 'POST':
         username = request.POST.get('username')
-        try:
-            if User.objects.get(username=username):
-                print("Invitation sent")
-        except:
-            print("Invalid username")
+        if User.objects.get(username=username) == request.user:
+            print("Cannot send to yourself")
+        else:
+            try:
+                if User.objects.get(username=username):
+                    print("Invitation sent")
+            except:
+                print("Invalid username")
 
     project = Project.objects.get(id=pk)
     task = project.projectTasks.all()
